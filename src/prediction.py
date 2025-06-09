@@ -4,11 +4,14 @@ import sys
 
 def load_model(model_path):
     try:
-        model, feature_engineer = joblib.load(model_path)
+        data = joblib.load(model_path)
+        model = data['model']
+        feature_engineer = data['feature_engineer']
         return model, feature_engineer
     except Exception as e:
         print(f"Error loading model: {e}")
         sys.exit(1)
+
 
 def prepare_input_data(raw_data, feature_engineer):
     try:
