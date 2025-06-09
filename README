@@ -1,0 +1,127 @@
+
+  Bank Subscription Prediction Project 
+
+This project focuses on building a machine learning model to predict whether a customer will subscribe to a term deposit based on data from a direct marketing campaign. The solution integrates advanced data preprocessing, feature engineering, model training, evaluation, and prediction in a production-ready pipeline.
+
+
+
+
+BANK_SUBSCRIPTION/
+├── app/
+│   ├── app.py              # Main Streamlit application file
+│   └── datasets/           # Datasets specifically for the app 
+├── notebook/
+│   ├── datasets/           # Datasets copied/used by notebooks
+│   └── 01_eda.ipynb        # Exploratory Data Analysis Notebook
+├── report/
+│   └── subscription_analysis_and_prediction.pdf # Project Report pdf
+├── results/
+│   └── confusion_matrix.png # Model evaluation visuals
+├── src/                    # Core source code for the project
+│   ├── data/               # Contains raw and test datasets
+│   │   ├── bank-full.csv
+│   │   └── bank.csv
+│   ├── model/              # Stores trained machine learning models
+│   │   └── trained_model.joblib
+│   ├── prediction.py       # Script for making predictions
+│   ├── preprocess.py       # Script for data cleaning and preparation
+│   ├── test.py             # Script for teststing
+│   └── trained.py          # Script for model training
+├── venv/                   # Python Virtual Environment (ignored by .gitignore)
+├── .gitignore              # Specifies files and folders to be ignored by Git
+├── prediction_history.json # Stores historical prediction data
+├── README.md               # Project overview and documentation
+└── requirements.txt        # Lists all project dependencies
+
+
+🧪 Data Overview
+The dataset (bank-full.csv) contains customer demographics and interaction history with the marketing campaign. Key variables include:
+
+age, job, marital, education
+
+balance, housing, loan
+
+campaign, pdays, previous, poutcome
+
+Target: subscription (binary)
+
+🧰 Methodology
+1. Feature Engineering (FeatureEngineer)
+
+Derived:
+
+was_contacted: Binary indicator from pdays
+
+engagement_score: Ratio of previous contacts to recency
+
+age_group: Categorized age
+
+Balance_Tier: Categorized balance level
+
+2. Preprocessing Pipeline (get_preprocessor)
+
+Handles:
+
+Missing values (SimpleImputer)
+
+Categorical encoding (OneHotEncoder)
+
+Binary features (yes/no → 1/0)
+
+Standardization for numeric features
+
+3. Model Training (training.py)
+
+Model: RandomForestClassifier (with class weight balancing)
+
+Resampling: SMOTEENN (combined oversampling and undersampling)
+
+Hyperparameter Tuning: GridSearchCV
+
+Scoring Metrics: F1, Recall, Precision
+
+Output: Best model saved as trained_model.joblib
+
+4. Model Evaluation
+
+Final Test Metrics:
+
+F1 Score: ✅ High balance between precision and recall
+
+Recall: ✅ Captures a large portion of positive cases
+
+Precision: ✅ Minimizes false positives
+
+5. Prediction Pipeline (prediction.py)
+
+Accepts new customer data in pandas.DataFrame
+
+Applies saved feature engineering and preprocessing
+
+Outputs prediction (0/1) and probability of subscription
+
+🚀 How to Run
+
+Install dependencies
+
+pip install pandas numpy scikit-learn imbalanced-learn joblib
+
+Train the model
+
+python training.py
+
+Run a prediction
+
+python prediction.py
+
+📌 Notes
+
+The pipeline is built using scikit-learn and imbalanced-learn.
+
+The project is optimized for real-world deployment and extension.
+
+
+OpenAI's ChatGPT — Assisted in designing pipelines and documentation
+
+📄 License
+This project is open-source and available under the MIT License.
