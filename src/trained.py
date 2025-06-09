@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_PATH = os.path.join(BASE_DIR, 'data', 'bank-full.csv')
 MODEL_PATH = os.path.join(BASE_DIR, 'model', 'trained_model.joblib')
 
-# Ensure models directory exists
+# models directory 
 os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
 
 # Load and preprocess data
@@ -37,12 +37,10 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-# =============================================
-# CORRECTED RESAMPLER IMPLEMENTATION
-# =============================================
+# RESAMPLER IMPLEMENTATION
 smote = SMOTE(sampling_strategy=0.3, k_neighbors=5)
-enn = EditedNearestNeighbours(sampling_strategy='majority')  # Correct ENN class
-resampler = SMOTEENN(smote=smote, enn=enn)  # Proper initialization
+enn = EditedNearestNeighbours(sampling_strategy='majority')  
+resampler = SMOTEENN(smote=smote, enn=enn) 
 
 # Class weights
 class_weights = {0: 1, 1: len(y_train[y_train==0])//len(y_train[y_train==1])}
@@ -53,7 +51,7 @@ pipeline = ImbPipeline(steps=[
     ('resample', resampler),
     ('classifier', RandomForestClassifier(
         random_state=42,
-        class_weight='balanced',  # Simpler approach that works
+        class_weight='balanced',
         bootstrap=True
     ))
 ])
@@ -73,15 +71,16 @@ scoring = {
     'precision': make_scorer(precision_score)
 }
 
+# Try-except block for robust error handling and debugging
 grid_search = GridSearchCV(
     pipeline,
     param_grid,
-    cv=3,  # Reduced for faster debugging
+    cv=3,  
     scoring=scoring,
-    refit='f1',  # Focus on balanced metric
+    refit='f1',  
     n_jobs=-1,
     verbose=2,
-    error_score='raise'  # Will show exact errors
+    error_score='raise'  
 )
 
 try:
@@ -105,14 +104,8 @@ try:
     
 except Exception as e:
     print(f"❌ Training failed: {str(e)}")
-    # Additional debug info
+    
     print("\nDebug Info:")
     print(f"X_train shape: {X_train.shape}")
     print(f"y_train value counts:\n{y_train.value_counts()}")
     print(f"Pipeline steps: {[step[0] for step in pipeline.steps]}")
-
-
-
-
-
-
